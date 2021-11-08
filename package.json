@@ -1,0 +1,32 @@
+{
+  "dependencies": {
+    "express": "^4.17.1",
+    "fs-extra": "^10.0.0",
+    "mongodb": "^4.1.4",
+    "mongodb-memory-server": "^8.0.2",
+    "morgan": "^1.10.0",
+    "node-fetch": "^3.0.0",
+    "terminal-game-io": "^3.1.0",
+    "trim-newlines": "^4.0.2",
+    "yargs": "^17.2.1"
+  },
+  "type": "module",
+  "iohook": {
+    "targets": [
+      "node-93"
+    ],
+    "platforms": [
+      "win32",
+      "darwin",
+      "linux"
+    ],
+    "arches": [
+      "x64",
+      "ia32"
+    ]
+  },
+  "devDependencies": {
+    "eslint": "^8.2.0",
+    "prettier": "^2.4.1"
+  }
+}
