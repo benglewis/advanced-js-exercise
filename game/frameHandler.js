@@ -3,6 +3,7 @@ import { setTreatLocation } from "./gameMechanics.js"
 import { validMove } from "./randomGenerators.js"
 
 const BLANK_SPACE = "  "
+const SNAKE_HEAD = "🐦"
 const SNAKE = "🐍"
 const TREAT = "🍬"
 export const GAME_OVER_TEXT = "GAME OVER!"
@@ -16,7 +17,7 @@ export const getFrame = async (game) => {
         })
       ).json()
     : []
-  if (!validMove(game.dimensions, snakesCoordinates)) {
+  if (!(await validMove(game.dimensions, snakesCoordinates))) {
     await putRequest("endGame", {
       id: game.id,
     })
@@ -31,18 +32,16 @@ export const getFrame = async (game) => {
         `${game.treatCoordinate[0]},${game.treatCoordinate[1]}`
       )
     ) {
-      game.treatCoordinate = setTreatLocation(game.id, game.dimensions)
-      await postRequest("treat", {
-        id: game.id,
-        treatCoordinate: game.treatCoordinate,
-      })
+      game.treatCoordinate = await setTreatLocation(game.id, game.dimensions)
     }
     return Array.from({ length: height }, (_, h) =>
       Array.from({ length: width }, (_, w) =>
         w === game.treatCoordinate[0] && h === game.treatCoordinate[1]
           ? TREAT
           : snakesStrings.includes(`${w},${h}`)
-          ? SNAKE
+          ? snakesStrings[snakesStrings.length - 1] === `${w},${h}`
+            ? SNAKE_HEAD
+            : SNAKE
           : BLANK_SPACE
       ).join("")
     ).join("")
