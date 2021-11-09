@@ -15,9 +15,8 @@ export const DIRECTIONS = {
 const START_SIZE = 4
 
 export const setTreatLocation = async (gameId, dimensions) => {
-  const newTreatCoordinate = await getRandomContinuousCoordinates(
-    1,
-    dimensions
+  const newTreatCoordinate = (
+    await getRandomContinuousCoordinates(1, dimensions)
   )[0]
   await postRequest("treat", {
     id: gameId,
@@ -34,7 +33,7 @@ export const createGame = async () => {
   )
   const snakeDirection = await getRandomDirection()
   const treatCoordinate = (
-    await getRandomContinuousCoordinates(4, dimensions)
+    await getRandomContinuousCoordinates(1, dimensions)
   )[0]
 
   const game = {
