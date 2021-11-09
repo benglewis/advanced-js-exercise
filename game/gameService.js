@@ -105,6 +105,8 @@ app.put("/game", async (req, res) => {
     } finally {
       await session.endSession()
     }
+  } else {
+    res.json({ gameOver: true })
   }
 })
 
@@ -131,11 +133,11 @@ app.put("/snake-direction", async (req, res) => {
 })
 
 app.post("/treat", async (req, res) => {
-  const { snakeCoordinates } = await games.findOne({
+  const { snakeDirection, snakeCoordinates } = await games.findOne({
     _id: new ObjectId(req.body.id),
   })
-  const xOffset = snakeCoordinates[0][0] - snakeCoordinates[1][0]
-  const yOffset = snakeCoordinates[0][1] - snakeCoordinates[1][1]
+  const extraX = snakeCoordinates[0][0] - OFFSET_LOOKUP[snakeDirection][0]
+  const extraY = snakeCoordinates[0][1] - OFFSET_LOOKUP[snakeDirection][1]
   res.json(
     await games.updateOne(
       { _id: new ObjectId(req.body.id) },
@@ -148,7 +150,7 @@ app.post("/treat", async (req, res) => {
         },
         $push: {
           snakeCoordinates: {
-            $each: [[xOffset, yOffset]],
+            $each: [[extraX, extraY]],
             $position: 0,
           },
         },
