@@ -9,9 +9,9 @@ import fsextra from "fs-extra"
 const GAME = "game"
 
 const DB_PATH = path.join(process.cwd(), GAME, "db")
-fsextra.exists(DB_PATH) || (await fsextra.mkdir(DB_PATH))
+fsextra.existsSync(DB_PATH) || (await fsextra.mkdir(DB_PATH))
 const DB_BINARY = path.join(process.cwd(), GAME, "db-binary")
-fsextra.exists(DB_BINARY) || (await fsextra.mkdir(DB_BINARY))
+fsextra.existsSync(DB_BINARY) || (await fsextra.mkdir(DB_BINARY))
 
 const mongod = await MongoMemoryServer.create({
   instance: {
