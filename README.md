@@ -19,7 +19,7 @@ Run `npm i` to install the requirements for this section.
 ### Here are the requirements
 
 1. You are building the logic for an game of snake. Your goal is to create three functions:
-   1. A function which validates whether a location is currently occupied by the snake's tail and inside the grid, i.e. a valid location to either place a treat or move the snake. This should in the `./game/gameMechanics.js` file.
+   1. A function which validates whether a location is currently occupied by the snake's tail and inside the grid, i.e. a valid location to either place a treat or move the snake. This should in the `./game/randomGenerators.js` file.
    2. A function which generates a random valid location for a treat (e.g. an apple) given first function (i.e. it verifies that the treat won't be on the snake's tail). This should in the `./game/gameMechanics.js` file.
    3. A function that generates a random direction for the snake to start facing. This should be in the file `./game/randomGenerators.js`
    4. A function that generates a random set of snake coordinates for the game to start. This should be in the file `./game/randomGenerators.js`. This function will also be called with length 1 to place treats.
