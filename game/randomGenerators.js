@@ -1,29 +1,52 @@
-import { DIRECTIONS } from "./gameMechanics.js"
+import { spawn, Worker } from "threads"
+
+const randomWorker = await spawn(new Worker("./randomWorker"))
+
+const MAX_RETRIES = 5
 
 export const validMove = async (gridDimensions, coordinates) => {
-  // TODO: Check if a move is valid!
-  return true
+  return await randomWorker.validMove(gridDimensions, coordinates)
 }
 
 export const getRandomDirection = async () => {
-  // TODO: Generate a random direction. Stub implemented for now
-  return DIRECTIONS.RIGHT
+  return await randomWorker.generateRandomDirection()
 }
 export const getRandomContinuousCoordinates = async (
   numberOfCoordinates,
   gridDimensions,
   retries = 0
 ) => {
-  // TODO: Generate a random array of coordinates (i.e. arrays of [x, y]) which are continuous & of size `numberOfCoordinates`
   // Stub implemented for now
-  return [
-    [2, 3],
-    [2, 4],
-    [2, 5],
-    [2, 6],
-  ]
+  const [gridWidth, gridHeight] = gridDimensions
+  const firstCoordinate = await randomWorker.generateCoordinate(
+    gridWidth,
+    gridHeight
+  )
+  const coordinates = await Array.from({
+    length: numberOfCoordinates - 1,
+  }).reduce(
+    async (accP) => {
+      const acc = await accP
+      return [
+        ...acc,
+        await randomWorker.generateConnectedCoordinate(acc[acc.length - 1]),
+      ]
+    },
+    [firstCoordinate]
+  )
+
+  if (validMove(gridDimensions, coordinates)) {
+    return coordinates
+  } else if (retries <= MAX_RETRIES) {
+    return await getRandomContinuousCoordinates(
+      numberOfCoordinates,
+      gridDimensions,
+      retries + 1
+    ) // Retry
+  } else {
+    throw Error("Failed to find a valid location to place the snake!")
+  }
 }
 export const getRandomGameSize = async () => {
-  // TODO: Generate a random game size between 10x10 and 20x20. Stub implemented for now
-  return [10, 10]
+  return randomWorker.generateRandomGridSize()
 }
